@@ -1,6 +1,6 @@
 # ProjetTDE : JSON vers TEI
 
-#Fonctionnalité
+# Fonctionnalité
  - Accepte un Json Structuré suivant un Json schema accessible sur l'interface web
  - Vérifie l'input en deux étape : 
                1. Vérification préliminaire : Type du fichier envoyé et validité du syntaxe json 
