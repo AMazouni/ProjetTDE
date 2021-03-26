@@ -1,20 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}TEI Dictionnaire{% endblock %}
+{% block title %}JSON TO TEI{% endblock %}
 
 {% block content %}
     <form class="contact2-form validate-form" method="post" enctype="multipart/form-data">
+
     {% csrf_token %}
 
 					<span class="contact2-form-title">
 						JSON to TEI
 					</span>
+
+        <p>The file should respect the <a href="/json/jsonschema" ><u>Json Schema</u></a>, or have the propertie "validate"=false to skip tests  <a href="/json/sample"><u>(JSON EXAMPLE)</u></a></p>
                     <div id="uploadiv">
                             <input  type="file" name="jsonFile" required>
                         {% if error %}
                             <p>{{ error }}</p>
                         {% else %}
-                            <p>Drag your file here or click in this area.</p>
+                            <p>Drag your file here or click in this area. </p>
                         {% endif %}
                     </div>
 
