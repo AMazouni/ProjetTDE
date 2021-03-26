@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}TEI Dictionnaire{% endblock %}
+
+{% block content %}
+   <span class="contact2-form-title">
+						JSON to TEI
+					</span>
+<div class="container-contact2-form-btn">
+						<div class="wrap-contact2-form-btn">
+							<div class="contact2-form-bgbtn"></div>
+							<button class="contact2-form-btn">
+                                <a href="/json"> Using Json</a>
+							</button>
+						</div>
+                        <div class="wrap-contact2-form-btn">
+							<div class="contact2-form-bgbtndis"></div>
+							<button class="contact2-form-btn" disabled>
+								<a href="#"> Using CSV</a>
+							</button>
+						</div>
+
+					</div>
+{% endblock %}

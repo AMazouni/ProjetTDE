@@ -320,6 +320,7 @@ textarea.input2 + .focus-input2::after {
 }
 
 .contact2-form-bgbtn {
+
   position: absolute;
   z-index: -1;
   width: 300%;
@@ -443,8 +444,8 @@ textarea.input2 + .focus-input2::after {
 }
 
 #uploadiv{
-  
-  border: 4px dashed black;
+  position : relative;
+  border: 4px dashed Black;
   margin: 3%;
 }
 #uploadiv p{
@@ -471,5 +472,27 @@ display: block;
   opacity: 0;
 }
 
+.contact2-form-btn>a{
+  color:white;
+  font-size: 1.3rem;
+  font-family: Poppins-Regular;
+}
+
+.contact2-form-bgbtndis {
+  position: absolute;
+  z-index: -1;
+  width: 300%;
+  height: 100%;
+  background: rgba(219,21,99,1);
+  background: -webkit-linear-gradient(-135deg, #212429,#243B55);
+  background: -o-linear-gradient(-135deg, #212429,#243B55);
+  background: -moz-linear-gradient(-135deg, #212429,#243B55);
+  background: linear-gradient(-135deg, #212429,#243B55);
+  filter:blur(2px);
+  top: 0;
+  left: -100%;
+
+
+}
 
 
