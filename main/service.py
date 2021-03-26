@@ -1,21 +1,79 @@
 import json
 import os
+import random
 
+from django.core.files.storage import FileSystemStorage
+from jsonschema import validate
 from DjangoProject import settings
+from DjangoProject.settings import BASE_DIR
 
 
-def is_json(name) -> bool:
-    print(settings.BASE_DIR)
-    print(name)
-    f = open(settings.BASE_DIR / name)
+
+
+def openUploadedfile(path) -> str:
+    print(path)
+    f = open(path)
     content = f.read()
+    return content
+
+def is_json(path) -> bool:
+    print(settings.BASE_DIR)
+    print(path)
+
     try:
-        json_object = json.loads(content)
+        print("here")
+        json_object = json.loads(openUploadedfile(path))
         print(json_object)
     except ValueError as e:
-        os.remove(settings.BASE_DIR / name)
+        print(str(e))
+        os.remove(path)
         return False
     return True
+
+def jsonschemavalidate(path) :
+    input = openUploadedfile(path)
+    ins=json.loads(input)
+    if 'validate' in ins:
+        if ins['validate']==False :
+            return True
+    try :
+      validate(instance=ins,schema=JSON_SCHEMA)
+      return True
+    except Exception as es :
+        return str(es)
+
+
+
+########################################################################
+from lxml import etree
+
+def getDict(path) :
+    input = openUploadedfile(path)
+    ins=json.loads(input)
+    return ins
+
+
+def createHeader(dic):
+     tei_header= etree.Element('teiHeader')
+     return tei_header
+
+
+
+def createXml(path) :
+    dic = getDict(path)
+    print(dic)
+    print(type(dic))
+    print('validate' in dic)
+    print(dic['validate'])
+    tei_root = etree.Element('tei')
+    if 'globAttr' in dic :
+        print()
+    if 'teiHeader' in dic :
+       print()
+    print("")
+
+
+
 #####################################################################
 ##################### STRUCTURE #####################################
 #####################################################################

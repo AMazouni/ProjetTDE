@@ -12,7 +12,7 @@
                     <div id="uploadiv">
                             <input  type="file" name="jsonFile" required>
                         {% if error %}
-                            <p>There is a probleme with the file you sent.</p>
+                            <p>{{ error }}</p>
                         {% else %}
                             <p>Drag your file here or click in this area.</p>
                         {% endif %}
