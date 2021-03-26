@@ -12,8 +12,9 @@ from DjangoProject.settings import BASE_DIR
 
 def openUploadedfile(path) -> str:
     print(path)
-    f = open(path)
+    f = open(path,encoding='utf-8')
     content = f.read()
+    print(content)
     return content
 
 def is_json(path) -> bool:
@@ -30,6 +31,7 @@ def is_json(path) -> bool:
         return False
     return True
 
+import jsonschema
 def jsonschemavalidate(path) :
     input = openUploadedfile(path)
     ins=json.loads(input)
@@ -38,8 +40,11 @@ def jsonschemavalidate(path) :
             return True
     try :
       validate(instance=ins,schema=JSON_SCHEMA)
+
       return True
     except Exception as es :
+        print(es)
+        print(str(es))
         return str(es)
 
 
@@ -47,32 +52,147 @@ def jsonschemavalidate(path) :
 ########################################################################
 from lxml import etree
 
+
+tei_root = etree.Element('TEI')
+
 def getDict(path) :
     input = openUploadedfile(path)
     ins=json.loads(input)
     return ins
 
+def addAttr(listattr, element):
+    for a in listattr:
+        if ('name' in a) and ('value' in a):
+            element.set(a['name'], a['value'])
+
+def addGlobAttr(listattr):
+    global tei_root
+    addAttr(listattr,tei_root)
+
+def addContent(list, parent):
+    for c in list :
+        if 'elementName' in c :
+            element = etree.SubElement(parent,c['elementName'])
+            if 'attr' in c:
+                addAttr(c['attr'],element)
+            if 'content' in c :
+                addContent(c['content'],element)
+        elif 'text' in c:
+            parent.text = c['text']
+
+
+def createPubStmt(dic, tei_header : etree.Element):
+    tei_pubStmt = etree.SubElement(tei_header,'publicationStmt')
+    if 'attr' in dic:
+        addAttr(dic['attr'], tei_pubStmt)
+    if 'addContent' in dic :
+         addContent(dic['addContent'],tei_pubStmt)
+
+
+def createRespStmt(dic,tei_titleStmt):
+    tei_RespStmt = etree.SubElement(tei_titleStmt,'respStmt')
+    if 'resp' in dic:
+        resp= etree.SubElement(tei_RespStmt,'resp')
+        resp.text = dic['resp']
+    if 'name' in dic:
+        name= etree.SubElement(tei_RespStmt,'name')
+        name.text = dic['name']
+    if 'addContent' in dic:
+        addContent(dic['addContent'],tei_RespStmt)
+
+
+def createTitleStmt(dic, tei_filedesc):
+    tei_titlestmt = etree.SubElement(tei_filedesc, 'titleStmt')
+    if 'title' in dic:
+        tei_title= etree.SubElement(tei_titlestmt,'title')
+        tei_title.text = dic['title']
+    if 'respStmt' in dic :
+        createRespStmt(dic['respStmt'],tei_titlestmt)
+    if 'attr' in dic:
+        addAttr(dic['attr'], tei_titlestmt)
+    if 'addContent' in dic:
+        addContent(dic['addContent'], tei_titlestmt)
+
+
+def createSourceDesc(dic, tei_filedesc):
+    tei_sourceDesc = etree.SubElement(tei_filedesc,'sourceDesc')
+    if 'attr' in dic:
+        addAttr(dic['attr'], tei_sourceDesc)
+    if 'addContent' in dic:
+        addContent(dic['addContent'],tei_sourceDesc)
+
+
+def createFileDesc(dic, tei_header):
+    tei_filedesc= etree.SubElement(tei_header,'fileDesc')
+    if 'attr' in dic:
+        addAttr(dic['attr'], tei_filedesc)
+    if 'publicationStmt' in dic:
+        print("pubstmt found")
+        createPubStmt(dic['publicationStmt'], tei_filedesc)
+    if 'titleStmt' in dic:
+        createTitleStmt(dic['titleStmt'],tei_filedesc)
+    if 'sourceDesc' in dic:
+        createSourceDesc(dic['sourceDesc'],tei_filedesc)
+    if 'addContent' in dic:
+        addContent(dic['addContent'],tei_filedesc)
+
 
 def createHeader(dic):
-     tei_header= etree.Element('teiHeader')
-     return tei_header
+     tei_header= etree.SubElement(tei_root,'teiHeader')
+     if 'attr' in dic:
+         addAttr(dic['attr'], tei_header)
+     if 'fileDesc' in dic :
+         createFileDesc(dic['fileDesc'],tei_header)
+     if 'addContent' in dic:
+         addContent(dic['addContent'], tei_header)
+
+
+
+
+##############################################################################################
+
 
 
 
 def createXml(path) :
-    dic = getDict(path)
-    print(dic)
-    print(type(dic))
-    print('validate' in dic)
-    print(dic['validate'])
-    tei_root = etree.Element('tei')
-    if 'globAttr' in dic :
-        print()
-    if 'teiHeader' in dic :
-       print()
-    print("")
+    global tei_root
+    try :
+        dic = getDict(path)
+        print(dic)
+        print(type(dic))
+        print('validate' in dic)
+        print(dic['validate'])
 
+        if 'globAttr' in dic:
+            print('adding globAttr')
+            addGlobAttr(dic['globAttr'])
+        if 'teiHeader' in dic:
+             print('adding Header')
+             createHeader(dic['teiHeader'])
+             createText(dic['text'])
+        print(etree.tostring(tei_root, pretty_print=True, encoding='unicode'))
+    except Exception as ex :
+        str(ex)
+        tei_root = etree.Element("tei")
+        return False,str(ex)
+    return True, etree.tostring(tei_root, pretty_print=True, encoding='unicode')
 
+########################################################################
+def createText(dic):
+    tei_text = etree.SubElement(tei_root,'text')
+
+    if 'front' in dic:
+        tei_front = etree.SubElement(tei_text,'front')
+        if 'content' in dic['front']:
+            addContent(dic['front']['content'],tei_front)
+    if 'body' in dic:
+        tei_body = etree.SubElement(tei_text,'body')
+        if 'content' in dic['body']:
+            addContent(dic['body']['content'],tei_body)
+    if 'back' in dic:
+        tei_back = etree.SubElement(tei_text,'back')
+        if 'content' in dic['back']:
+            addContent(dic['back']['content'],tei_back)
 
 #####################################################################
 ##################### STRUCTURE #####################################

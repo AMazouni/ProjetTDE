@@ -10,7 +10,7 @@ from main.jsonFormM import jsonForm
 import random
 
 from main.service import is_json, TEI_STRUCT, JSON_SCHEMA, jsonschemavalidate, createXml
-
+from lxml import etree
 
 def index(request):
     return render(request,"Index.html",{})
@@ -28,10 +28,11 @@ def json_upload(request):
       print(file)
       if file.content_type=='application/json' :
             print(file.content_type)
+            oldname = file.name
             print(type(file))
             print()
             f = FileSystemStorage(location=BASE_DIR)
-            name = "temp" + str(random.randint(1, 2000)) + ".txt"
+            name = "temp" + str(random.randint(1, 2000))
             print(name)
             n = f.save(name=name, content=file)
             print("n=" + str(n))
@@ -41,22 +42,22 @@ def json_upload(request):
             if isinstance(jsonschemavalidate(path),str) :
                 return render(request, 'jsonUpload.html', {'error': "This file doesn't obey to the minimal structure of TEI!"+jsonschemavalidate(path)})
 
-            createXml(path)
-            return HttpResponseRedirect('/')
+            output =createXml(path)
+            print(output)
+            if not(output[0]) :
+                  return render(request, 'jsonUpload.html',
+                                {'error': output[1]})
+            else :
+
+                return HttpResponse(content=output[1],content_type="text/xml")
       else :
           return render(request,'jsonUpload.html', {'error':"This file is not a json type!"})
     else:
+
         form = jsonForm()
     return render(request, 'jsonUpload.html', {})
 
 
-def download(request):
-    file_name = ""
-    path_to_file = ""
-    response = HttpResponse(mimetype='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(file_name)
-    response['X-Sendfile'] = smart_str(path_to_file)
-    return response
 
 
 def getJsonSample(request):
