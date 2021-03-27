@@ -22,15 +22,14 @@ def index(request):
 
 def json_upload(request):
     if request.method == 'POST':
-      print("tst")
+
       file= request.FILES['jsonFile']
-      print(type(file))
+
       print(file)
       if file.content_type=='application/json' :
             print(file.content_type)
             oldname = file.name
-            print(type(file))
-            print()
+
             f = FileSystemStorage(location=BASE_DIR)
             name = "temp" + str(random.randint(1, 2000))
             print(name)

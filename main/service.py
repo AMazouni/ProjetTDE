@@ -3,7 +3,7 @@ import os
 import random
 
 from django.core.files.storage import FileSystemStorage
-from jsonschema import validate
+from jsonschema import validate, Draft7Validator
 from DjangoProject import settings
 from DjangoProject.settings import BASE_DIR
 
@@ -11,20 +11,19 @@ from DjangoProject.settings import BASE_DIR
 
 
 def openUploadedfile(path) -> str:
-    print(path)
+
     f = open(path,encoding='utf-8')
     content = f.read()
-    print(content)
+
     return content
 
 def is_json(path) -> bool:
-    print(settings.BASE_DIR)
-    print(path)
+
 
     try:
-        print("here")
+
         json_object = json.loads(openUploadedfile(path))
-        print(json_object)
+
     except ValueError as e:
         print(str(e))
         os.remove(path)
@@ -40,10 +39,10 @@ def jsonschemavalidate(path) :
             return True
     try :
       validate(instance=ins,schema=JSON_SCHEMA)
-
+      print('succeess ???')
       return True
     except Exception as es :
-        print(es)
+        print(type(es))
         print(str(es))
         return str(es)
 
@@ -67,6 +66,7 @@ def addAttr(listattr, element):
 
 def addGlobAttr(listattr):
     global tei_root
+
     addAttr(listattr,tei_root)
 
 def addContent(list, parent):
@@ -126,11 +126,11 @@ def createFileDesc(dic, tei_header):
     tei_filedesc= etree.SubElement(tei_header,'fileDesc')
     if 'attr' in dic:
         addAttr(dic['attr'], tei_filedesc)
+    if 'titleStmt' in dic:
+        createTitleStmt(dic['titleStmt'],tei_filedesc)
     if 'publicationStmt' in dic:
         print("pubstmt found")
         createPubStmt(dic['publicationStmt'], tei_filedesc)
-    if 'titleStmt' in dic:
-        createTitleStmt(dic['titleStmt'],tei_filedesc)
     if 'sourceDesc' in dic:
         createSourceDesc(dic['sourceDesc'],tei_filedesc)
     if 'addContent' in dic:
@@ -156,12 +156,10 @@ def createHeader(dic):
 
 def createXml(path) :
     global tei_root
+    tei_root = etree.Element('TEI')
     try :
         dic = getDict(path)
-        print(dic)
-        print(type(dic))
-        print('validate' in dic)
-        print(dic['validate'])
+
 
         if 'globAttr' in dic:
             print('adding globAttr')
@@ -173,7 +171,7 @@ def createXml(path) :
         print(etree.tostring(tei_root, pretty_print=True, encoding='unicode'))
     except Exception as ex :
         str(ex)
-        tei_root = etree.Element("tei")
+        tei_root = etree.Element("TEI")
         return False,str(ex)
     return True, etree.tostring(tei_root, pretty_print=True, encoding='unicode')
 
@@ -255,7 +253,7 @@ TEI_STRUCT={
 #####################################################################
 JSON_SCHEMA={
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "localhost:8000/json/jsonschema",
+
     "type": "object",
     "title": "TEI JSON Schema",
     "description": "Json structure to create a minimal TEI document.",
@@ -318,7 +316,8 @@ JSON_SCHEMA={
         "titleStmt" : {
           "$ref" : "#/definitions/TitleStmt-nullable"
         }
-      }
+      },
+      "required" : [ "titleStmt","publicationStmt","sourceDesc" ]
     },
     "NamedElement" : {
       "type" : "object",
