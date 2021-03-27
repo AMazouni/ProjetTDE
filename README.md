@@ -29,7 +29,7 @@
  # Démonstration
  ## Interface Web
  
- ![Interface Web](https://raw.githubusercontent.com/AMazouni/ProjetTDE/main/static/images/Screenshot1.png)  
+ ![Interface Web](https://raw.githubusercontent.com/AMazouni/ProjetTDE/main/static/images/ScreenShot1.png)  
  
  ## Exemple : Fichier de type incorrecte
  
@@ -41,7 +41,7 @@
  
  ## Input > Output 
  
- ![IO](https://raw.githubusercontent.com/AMazouni/ProjetTDE/main/static/images/inputoutput.png)
+ ![IO](https://raw.githubusercontent.com/AMazouni/ProjetTDE/main/static/images/inputOutput.png)
 
  
  
