@@ -41,7 +41,7 @@
  
  ## Input > Output 
  
- ![IO](https://raw.githubusercontent.com/AMazouni/ProjetTDE/main/static/images/inputOutput.png)
+ ![IO](https://raw.githubusercontent.com/AMazouni/ProjetTDE/main/static/images/inputeOutput.png)
 
  
  
