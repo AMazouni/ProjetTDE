@@ -6,7 +6,7 @@
                1. Vérification préliminaire : Type du fichier envoyé et validité du syntaxe json 
                2. Vérification avec JsonSchema de la structure minimale d'un document TEI(qu'on peut dépasser si on le souhaite)
   -Le Json schema permet donc de s'assurer que l'output serait un TEI valide dans l'hypothèse que les éléments données comme "addContent" Ou "Content" sont des éléments TEI valide.
-  - Le JSON schema a été crée à l'aide de l'outil "!()[https://github.com/victools/jsonschema-generator]"
+  - Le JSON schema a été crée à l'aide de l'outil " ![victools/jsonschema-generator](https://github.com/victools/jsonschema-generator) " qui est un outil JAVA permettant de générer des JSON schema à partir d'un modèle orienté objet
  
 
 # Requirements 
