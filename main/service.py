@@ -249,6 +249,46 @@ TEI_STRUCT={
 }
 
 ########################################################################
+##################################JSON_MIN
+########################################################################
+MIN_JSON={
+    "validate": True,
+    "globAttr": [
+    ],
+    "teiHeader": {
+        "fileDesc": {
+            "titleStmt": {
+                "title": "Title PlaceHolder"
+
+            },
+            "sourceDesc": {
+                "addContent": [{"elementName": "MandatorySubElement"}]
+            },
+            "publicationStmt": {
+                "addContent": [{"elementName": "MandatorySubElement"}]
+            }
+        },
+        "addContent": [
+
+        ]
+    },
+    "text": {
+        "front": {
+
+        },
+        "body": {
+
+            "content": [
+
+            ]
+        },
+        "back": {
+
+        }
+    }
+}
+
+########################################################################
 #####################JSON SCHEMA##############################
 #####################################################################
 JSON_SCHEMA={
@@ -478,7 +518,7 @@ JSON_SCHEMA={
           "type" : "string"
         }
       },
-      "required" : [ "respStmt", "title" ]
+      "required" : [ "title" ]
     }
   },
   "type" : "object",

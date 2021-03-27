@@ -9,7 +9,7 @@ from DjangoProject.settings import BASE_DIR
 from main.jsonFormM import jsonForm
 import random
 
-from main.service import is_json, TEI_STRUCT, JSON_SCHEMA, jsonschemavalidate, createXml
+from main.service import is_json, TEI_STRUCT, JSON_SCHEMA, jsonschemavalidate, createXml, MIN_JSON
 from lxml import etree
 
 def index(request):
@@ -66,5 +66,10 @@ def getJsonSample(request):
 
 def getJsonSchema(request):
     response = HttpResponse(json.dumps(JSON_SCHEMA),content_type="application/json")
+
+    return  response;
+
+def getJsonMin(request):
+    response = HttpResponse(json.dumps(MIN_JSON),content_type="application/json")
 
     return  response;
