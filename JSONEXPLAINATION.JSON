@@ -1,0 +1,40 @@
+{
+   "validate":true,
+   "globAttr":[
+   ],
+   "teiHeader":{
+      "fileDesc":{
+         "titleStmt":{
+            "title":"Title PlaceHolder"
+
+         },
+         "sourceDesc":{
+             "addContent":[{
+                 "elementName":"MandatorySubElement",
+                 "attr":[{"name":"FacultatifAttr","value":"true"}],
+                 "content":[{"text":"TEXTNODE"},{"elementName":"elementInbriqué"}]
+             }]
+         },
+         "publicationStmt":{
+           "addContent":[{"elementName":"MandatorySubElement"}]
+         }
+      },
+      "addContent":[
+         
+      ]
+   },
+   "text":{
+      "front":{
+
+      },
+      "body":{
+
+         "content":[
+
+         ]
+      },
+      "back":{
+         
+      }
+   }
+}
